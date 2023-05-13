@@ -1,0 +1,52 @@
+<html>
+    <head>
+        <title>ekolfinder</title>
+        <link rel="stylesheet" href="styles/index.css">
+    </head>
+    <body>
+        <h1 class="title">ekolfinder<span class="period">.</span></h1>
+            <div class="station-search"><!--  -->
+                <h1>Suche nach Zügen</h1>
+                <table class="station-search">
+                    <tr>
+                        <th>Zugnummer:</th>
+                        <th>Details des Zuges:</th>
+                    </tr>
+                    <tr>
+                        <th><input type="text" id="stationName" /></th>
+                        <th><div id="stationID"><p align="right"></p></div></th>
+                    </tr>
+                </table>
+            </div>
+        <!--<a href="viewStations.php">Alle bisher im System hinterlegten Stationen</a>
+        <br/>
+        <a href="viewRoute.php?RID=912">Die bisher im System hinterlegten Routen</a>-->
+        
+        <p class="copyright">ein Service der Rbd Cottbus</p>
+        </div>
+    </body>
+    
+    <script>
+        document.getElementById("stationName").addEventListener('input', suggestStation);
+        let initialState ="";
+
+        function suggestStation() {
+            let suggest = document.getElementById('stationID').firstChild;
+            let lookup = document.getElementById('stationName').value;
+
+            if(lookup != initialState && (lookup.replace(/\s/g, '').length)) {
+                initialState = lookup;
+
+                fetch('searchTrains.php?query=' + initialState)
+                    .then((response) => response.text())
+                    .then((text) => {
+                        suggest.innerHTML = text;
+                })
+            } else {
+                suggest.innerHTML  = "";
+            }
+        }
+
+    </script>
+
+</html>
