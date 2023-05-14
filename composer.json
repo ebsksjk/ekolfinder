@@ -2,5 +2,6 @@
     "require": {
     },
     "name": "maplemonarchs/ekolfinder",
-    "description": "database for finding and storing freight trains"
+    "description": "database for finding and storing freight trains",
+    "license": "MIT"
 }
