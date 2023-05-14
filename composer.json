@@ -1,4 +1,6 @@
 {
     "require": {
-    }
+    },
+    "name": "ekolfinder 0.1",
+    "description": "database for finding and storing freight trains"
 }
