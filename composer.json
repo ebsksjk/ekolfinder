@@ -1,6 +1,6 @@
 {
     "require": {
     },
-    "name": "ekolfinder 0.1",
+    "name": "maplemonarchs/ekolfinder",
     "description": "database for finding and storing freight trains"
 }
