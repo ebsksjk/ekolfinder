@@ -1,8 +1,4 @@
 <?php
-ob_start(); // Pufferung starten
-
-require('../DBConnect.php');
-
 session_start();
 
 // Überprüfen, ob der Benutzer angemeldet ist
@@ -11,6 +7,8 @@ if (!isset($_SESSION['username'])) {
     header('Location: loginUser.php');
     exit;
 }
+
+ob_start(); // Pufferung starten
 
 // Geschützter Inhalt der Seite
 
@@ -68,8 +66,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
     header('Content-Type: application/json');
     echo json_encode($response);
     exit; // Beende das Skript hier, um das Frontend nicht auszuführen
-}
+} 
+
 ?>
+
 
 <!DOCTYPE html>
 <html>
@@ -105,7 +105,7 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
 
     <script>
        function loadFile(event) {
-            var output = document.getElementById('engine');
+            var output = document.getElementById("engine");
             output.src = URL.createObjectURL(event.target.files[0]);
             output.onload = function() {
                 URL.revokeObjectURL(output.src); // free memory
@@ -115,10 +115,10 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
         function uploadImage(event) {
             event.preventDefault(); // Standardverhalten des Formulars unterdrücken
 
-            var fileInput = document.getElementById('fileInput');
-            var baureihe = document.getElementById('class');
-            var name = document.getElementById('name');
-            var owner = document.getElementById('owner');
+            var fileInput = document.getElementById("fileInput");
+            var baureihe = document.getElementById("class");
+            var name = document.getElementById("name");
+            var owner = document.getElementById("owner");
 
             var file = fileInput.files[0];
             var formData = new FormData();
@@ -127,31 +127,31 @@ if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             console.log(baureihe.value);
             console.log(owner.value);
 
-            formData.append('image', file, file.name);
-            formData.append('baureihe', baureihe.value);
-            formData.append('name', name.value);
-            formData.append('owner', owner.value);
+            formData.append("image", file, file.name);
+            formData.append("baureihe", baureihe.value);
+            formData.append("name", name.value);
+            formData.append("owner", owner.value);
 
             var xhr = new XMLHttpRequest();
-            xhr.open('POST', '<?php echo $_SERVER["PHP_SELF"]; ?>', true);
+            xhr.open("POST", "<?php $_SERVER["PHP_SELF"] ?>", true);
             xhr.onload = function() {
                 if (xhr.status === 200) {
                     var response = JSON.parse(xhr.responseText);
                     if (response.success) {
-                        console.log('Bild erfolgreich hochgeladen.');
+                        console.log("Bild erfolgreich hochgeladen.");
                         fileInput.value = null;
                         baureihe.value = null;
                         owner.value = null;
                         name.value = null;
 
-                        const img = document.getElementById('engine');
-                        img.setAttribute('src', '');
+                        const img = document.getElementById("engine");
+                        img.setAttribute("src", '');
 
                     } else {
-                        console.log('Fehler beim Hochladen des Bildes: ' + response.message);
+                        console.log("Fehler beim Hochladen des Bildes: " + response.message);
                     }
                 } else {
-                    console.log('Fehler beim Hochladen des Bildes.');
+                    console.log("Fehler beim Hochladen des Bildes.");
                 }
             };
             xhr.send(formData);
