@@ -1,10 +1,17 @@
 <?php
     session_start();
+    $file = fopen("private/.env", "r");
+        
+    $credentials = explode("->", fgets($file));
     //---------------------------------------------------------------------//
-    $usrname 	= "test";
-    $passwrd 	= "test";
-    $DSN 		= "mysql:host=localhost;dbname=ekolfinder";
+        $usrname 	= trim($credentials[1]);
+        $credentials = explode("->", fgets($file));
+        $passwrd 	= trim($credentials[1]);
+        $credentials = explode("->", fgets($file));
+        $DSN 		= trim($credentials[1]);
     //---------------------------------------------------------------------//
+
+    fclose($file);
 
     $conn = null;
 
