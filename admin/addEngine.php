@@ -19,7 +19,7 @@ ob_start(); // Pufferung starten
 <html>
 <head>
     <title>Lok hinzufügen</title>
-    <link rel="stylesheet" href="../styles/addEngine.css">
+    <link rel="stylesheet" href="./addEngine.css">
 </head>
 <body>
     <h1>Lok hinzufügen</h1>

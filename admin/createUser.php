@@ -1,4 +1,13 @@
 <?php
+    session_start();
+
+    // Überprüfen, ob der Benutzer angemeldet ist
+    if (!isset($_SESSION['username'])) {
+        // Benutzer ist nicht angemeldet, Weiterleitung zur Anmeldeseite
+        header('Location: loginUser.php');
+        exit;
+    }
+
     $file = fopen("private/.env", "r");
         
     $credentials = explode("->", fgets($file));
