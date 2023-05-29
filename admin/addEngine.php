@@ -8,7 +8,7 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
-ob_start(); // Pufferung starten
+
 
 // Geschützter Inhalt der Seite
 

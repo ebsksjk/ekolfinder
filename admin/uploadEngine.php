@@ -1,5 +1,7 @@
 <?php
 
+ob_start(); // Pufferung starten
+
 require("../DBConnect.php");
 
 if ($_SERVER['REQUEST_METHOD'] === 'POST') {
