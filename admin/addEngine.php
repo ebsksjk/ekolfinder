@@ -8,98 +8,82 @@ if (!isset($_SESSION['username'])) {
     exit;
 }
 
+$message = '';
 
+if($_SERVER['REQUEST_METHOD'] == 'POST') {
+    if ($_FILES['image']['error'] === 0) {
+        //require("../DBConnect.php");
 
-// Geschützter Inhalt der Seite
+        $uploadFolder = "../data/images/";
 
+        $uploadPath = $uploadFolder . $_POST['class'] . '.png';
+
+        $message .= $uploadPaths;
+
+        try {
+            imagepng(imagecreatefromstring(file_get_contents($_FILES['image']['tmp_name'])), $uploadPath);
+        } catch(Exception $e) {
+            die("Fehler beim Hochladen des Bildes! " . $e->getMessage());
+        }
+        
+
+        $message = "<div class='successBox'><p>Erfolgreich hochgeladen!</p></div>";
+
+        try {
+            require("../DBConnect.php");
+
+            $sql = "INSERT INTO Engines (Baureihe, Name, Owner) VALUES (?,?,?);";
+            $stmt= $DBASE->prepare($sql);
+            $stmt->execute([$_POST['class'], $_POST['name'], $_POST['owner']]);    
+        } catch(Exception $e) {
+            die("Fehler beim Hochladen der Daten! " . $e->getMessage());
+        }
+
+        
+    } else {
+        $message = "Fehler beim Upload";
+    }
+}
 ?>
-
 
 <!DOCTYPE html>
 <html>
-<head>
-    <title>Lok hinzufügen</title>
-    <link rel="stylesheet" href="./addEngine.css">
-</head>
-<body>
-    <h1>Lok hinzufügen</h1>
-    <div>
-        <form method="POST" enctype="multipart/form-data">
-        <table>
-            <tr>
-                <th>Bild</th>
-                <th>Baureihe</th>
-                <th>Name</th>
-                <th>Besitzer</th>
-            </tr>
-            <tr>
-                <td>
-                    <input accept="image/*" type="file" id="fileInput" name="image" onchange="loadFile(event)">
-                    <img id="engine"/>
-                </td>
-                <td><input type="text" id="class"></td>
-                <td><input type="text" id="name"></td>
-                <td><input type="text" id="owner"></td>
-            </tr>
+    <head>
+        <title>Lok hinzufügen</title>
+        <link rel="stylesheet" href="./addEngine.css">
+    </head>
+    <body>
+        <?= $message ?>
+        <h1>Lok hinzufügen</h1>
+            <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
+            <table>
+                <tr>
+                    <th>Bild</th>
+                    <th>Ordnungsnummer</th>
+                    <th>Name</th>
+                    <th>Besitzer</th>
+                </tr>
+                <tr>
+                    <td>
+                        <input accept="image/*" type="file" id="fileInput" name="image" onchange="loadFile(event)">
+                        <img id="engine"/>
+                    </td>
+                    <td><input type="text" id="class" name="class" placeholder="999 999"></td>
+                    <td><input type="text" id="name" name="name" placeholder="Name der Lok"></td>
+                    <td><input type="text" id="owner" name="owner" placeholder="Besitzer"></td>
+                </tr>
+            </table>
+            <button class="button-3" role="button">Bild hochladen</button> 
+            </form>
 
-        </table>
-        <button class="button-3" role="button" onclick="uploadImage(event)" >Bild hochladen</button> 
-        </form>
-    </div>
-
-    <script>
-       function loadFile(event) {
-            var output = document.getElementById("engine");
-            output.src = URL.createObjectURL(event.target.files[0]);
-            output.onload = function() {
-                URL.revokeObjectURL(output.src); // free memory
-            };
-        }
-
-        function uploadImage(event) {
-            event.preventDefault(); // Standardverhalten des Formulars unterdrücken
-
-            var fileInput = document.getElementById("fileInput");
-            var baureihe = document.getElementById("class");
-            var name = document.getElementById("name");
-            var owner = document.getElementById("owner");
-
-            var file = fileInput.files[0];
-            var formData = new FormData();
-
-            console.log(file.name);
-            console.log(baureihe.value);
-            console.log(owner.value);
-
-            formData.append("image", file, file.name);
-            formData.append("baureihe", baureihe.value);
-            formData.append("name", name.value);
-            formData.append("owner", owner.value);
-
-            var xhr = new XMLHttpRequest();
-            xhr.open("POST", "uploadEngine.php", true);
-            xhr.onload = function() {
-                if (xhr.status === 200) {
-                    var response = JSON.parse(xhr.responseText);
-                    if (response.success) {
-                        console.log("Bild erfolgreich hochgeladen.");
-                        fileInput.value = null;
-                        baureihe.value = null;
-                        owner.value = null;
-                        name.value = null;
-
-                        const img = document.getElementById("engine");
-                        img.setAttribute("src", '');
-
-                    } else {
-                        console.log("Fehler beim Hochladen des Bildes: " + response.message);
-                    }
-                } else {
-                    console.log("Fehler beim Hochladen des Bildes.");
-                }
-            };
-            xhr.send(formData);
-        }
-    </script>
-</body>
+        <script>
+            function loadFile(event) {
+                var output = document.getElementById("engine");
+                output.src = URL.createObjectURL(event.target.files[0]);
+                output.onload = function() {
+                    URL.revokeObjectURL(output.src); // free memory
+                };
+            }
+        </script>
+    </body>
 </html>
