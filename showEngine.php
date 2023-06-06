@@ -10,6 +10,14 @@
         <link rel="stylesheet" href="styles/table.css">
     </head>
     </body>
+        <?php
+            $baureihe = '';
+
+            foreach($conn->query("SELECT Baureihe, Ordnungsnummer from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
+                $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
+            }
+        ?>
+
         <h1 class="title">Loks ansehen: </h1>
 
         <table class="result-table">
@@ -23,41 +31,40 @@
                 <td>
                     <?php
                         echo "<image src='data/images/" .
-                        $_GET['Baureihe'] . 
+                        $baureihe . 
                         ".png' />";
                     ?>
                 </td>
                 <td>
                     <?php 
-                        echo $_GET['Baureihe'];
+                        echo $baureihe;
                     ?>
                 </td>
                 <td>
                     <?php 
-                        foreach($DBASE->query("SELECT Name from Engines WHERE Baureihe='" . $_GET['Baureihe'] ."';") as $row){
-                            echo $row['Name'];
+                        foreach($conn->query("SELECT name from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
+                            echo $row['name'];
                         }
                     ?>
                 </td>
                 <td>
                     <?php 
-                        foreach($DBASE->query("SELECT Owner from Engines WHERE Baureihe='" . $_GET['Baureihe'] ."';") as $row){
-                            echo $row['Owner'];
+                        foreach($conn->query("SELECT owner from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
+                            echo $row['owner'];
                         }
                     ?>
                 </td>
         </table>
-
-        <table class="result-table">
-            <tr>
-                <?php
-                    echo "<tr>";
-                    foreach($DBASE->query("SELECT Baureihe from Engines;") as $row){
-                        echo "<td><a href='" . $_SERVER["PHP_SELF"] . "?Baureihe=" . $row['Baureihe'] . "'>" . $row['Baureihe'] . "</a></td>";
-                    }
-                    echo "</tr>";
-                ?>
-            </tr>
-        </table>
+        <div class="other-engines">
+            <table class="engine-table">
+                <tr>
+                    <?php
+                        foreach($conn->query("SELECT EngineID, Baureihe, Ordnungsnummer FROM Engines ORDER BY Baureihe, Ordnungsnummer;") as $row){
+                            echo "<tr><td><a href='" . $_SERVER["PHP_SELF"] . "?ID=" . $row['EngineID'] . "'>" . $row['Baureihe'] . " " . $row['Ordnungsnummer'] .  "</a></td></tr>";
+                        }
+                    ?>
+                </tr>
+            </table>
+        </div>
     <body>
 </html>

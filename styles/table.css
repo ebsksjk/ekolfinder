@@ -32,6 +32,26 @@ th {
     border-collapse: collapse;
 }
 
+.engine-table {
+    float: left;
+    margin-left: 10;
+    margin-top: 10;
+    margin-right: auto;
+}
+
+.engine-table th {
+    border: 7px solid;
+    border-color: #3b4a3f;
+    border-collapse: collapse;
+}
+
+.engine-table td {
+    font-size: 2rem;
+    border: 7px solid;
+    border-color: #3b4a3f;
+    border-collapse: collapse;
+}
+
 body {
     margin: 0;
     background-color: #f1fcf3;

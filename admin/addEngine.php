@@ -16,9 +16,12 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $uploadFolder = "../data/images/";
 
-        $uploadPath = $uploadFolder . $_POST['class'] . '.png';
+        $uploadPath = $uploadFolder . trim($_POST['class']) . '.png';
 
-        $message .= $uploadPaths;
+        $exploder = explode(' ', trim($_POST['class']));
+
+        $br = $exploder[0];
+        $nr = $exploder[1];
 
         try {
             imagepng(imagecreatefromstring(file_get_contents($_FILES['image']['tmp_name'])), $uploadPath);
@@ -32,9 +35,9 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             require("../DBConnect.php");
 
-            $sql = "INSERT INTO Engines (Baureihe, Name, Owner) VALUES (?,?,?);";
-            $stmt= $DBASE->prepare($sql);
-            $stmt->execute([$_POST['class'], $_POST['name'], $_POST['owner']]);    
+            $sql = "INSERT INTO Engines (Baureihe, Ordnungsnummer, Name, Owner) VALUES (?,?,?,?);";
+            $stmt= $conn->prepare($sql);
+            $stmt->execute([$br, $nr, trim($_POST['name']), trim($_POST['owner'])]);    
         } catch(Exception $e) {
             die("Fehler beim Hochladen der Daten! " . $e->getMessage());
         }
