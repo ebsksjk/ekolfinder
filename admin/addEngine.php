@@ -58,6 +58,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
     <body>
         <?= $message ?>
         <h1>Lok hinzufügen</h1>
+            <div class="addForm">
             <form method="post" action="<?= $_SERVER['PHP_SELF'] ?>" enctype="multipart/form-data">
             <table>
                 <tr>
@@ -78,6 +79,7 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
             </table>
             <button class="button-3" role="button">Bild hochladen</button> 
             </form>
+            </div>
 
         <script>
             function loadFile(event) {

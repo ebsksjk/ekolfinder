@@ -33,7 +33,7 @@
                     <td>
                         <?php
                             echo "<image src='data/images/" .
-                            $baureihe . 
+                            trim($baureihe) . 
                             ".png' />";
                         ?>
                     </td>

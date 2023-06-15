@@ -65,11 +65,15 @@ h1 {
 
 form {
     margin: auto;
-    width: 50%;
     border: 3px solid green;
     padding: 10px;
 }
 
+
+.addForm {
+  width: 50%;
+  margin: auto;
+}
 
 body {
     margin: 0;
