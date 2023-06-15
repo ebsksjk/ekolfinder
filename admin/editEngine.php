@@ -1,5 +1,3 @@
-<DOCTYPE! html>
-
 <?php
     session_start();
 
@@ -68,6 +66,9 @@
         $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
     }
 ?>
+
+
+<DOCTYPE! html>
 <html>
     <head>
         <title>Loks bearbeiten</title>
