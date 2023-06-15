@@ -1,0 +1,11 @@
+.flexy {
+    margin-left: auto;
+    margin-right: auto;
+    display: flex;
+    flex-direction: row-reverse;
+    justify-content: center; /* Horizontale Ausrichtung */
+}
+
+.other-engines {
+    margin-right: 5%;
+}
