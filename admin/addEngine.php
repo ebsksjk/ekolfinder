@@ -15,13 +15,18 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         //require("../DBConnect.php");
 
         $uploadFolder = "../data/images/";
-
-        $uploadPath = $uploadFolder . trim($_POST['class']) . '.png';
+        $filename = uniqid();
+        $uploadPath = $uploadFolder . $filename . '.png';
 
         $exploder = explode(' ', trim($_POST['class']));
 
         $br = $exploder[0];
         $nr = $exploder[1];
+
+        $joinedCompany = date('Y-m-d', strtotime($_POST['joined']));
+        $leftCompany = date('Y-m-d', strtotime($_POST['left']));
+        $LiverySince = date('Y-m-d', strtotime($_POST['since']));
+        $LiveryUntil = date('Y-m-d', strtotime($_POST['until']));
 
         try {
             imagepng(imagecreatefromstring(file_get_contents($_FILES['image']['tmp_name'])), $uploadPath);
@@ -35,9 +40,11 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         try {
             require("../DBConnect.php");
 
-            $sql = "INSERT INTO Engines (Baureihe, Ordnungsnummer, Name, Owner) VALUES (?,?,?,?);";
+            $sql = "INSERT INTO 
+                Engines (Baureihe, Ordnungsnummer, Name, Owner, joinedCompany, leftCompany, liverySince, liveryUntil, imagePath) 
+                VALUES (?,?,?,?,?,?,?,?,?);";
             $stmt= $conn->prepare($sql);
-            $stmt->execute([$br, $nr, trim($_POST['name']), trim($_POST['owner'])]);    
+            $stmt->execute([$br, $nr, trim($_POST['name']), trim($_POST['owner']),$joinedCompany, $leftCompany, $LiverySince, $LiveryUntil, $filename]);    
         } catch(Exception $e) {
             die("Fehler beim Hochladen der Daten! " . $e->getMessage());
         }
@@ -45,6 +52,8 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
         
     } else {
         $message = "Fehler beim Upload";
+        var_dump($_POST);
+        echo date('Y-m-d', strtotime($_POST['joined']));
     }
 }
 ?>
@@ -66,6 +75,10 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <th>Ordnungsnummer</th>
                     <th>Name</th>
                     <th>Besitzer</th>
+                    <th>Bei Besitzer seit</th>
+                    <th>Bei Besitzer bis</th>
+                    <th>Lackierung seit</th>
+                    <th>Lackierung bis</th>
                 </tr>
                 <tr>
                     <td>
@@ -75,9 +88,13 @@ if($_SERVER['REQUEST_METHOD'] == 'POST') {
                     <td><input type="text" id="class" name="class" placeholder="999 999"></td>
                     <td><input type="text" id="name" name="name" placeholder="Name der Lok"></td>
                     <td><input type="text" id="owner" name="owner" placeholder="Besitzer"></td>
+                    <td><input type="date" id="joinedCompany" name="joined" placeholder="NULL"></td>
+                    <td><input type="date" id="leftCompany" name="left" placeholder="NULL"></td>
+                    <td><input type="date" id="liverySince" name="since" placeholder="NULL"></td>
+                    <td><input type="date" id="liveryUntil" name="until" placeholder="NULL"></td>
                 </tr>
             </table>
-            <button class="button-3" role="button">Bild hochladen</button> 
+            <button class="button-3" role="button">Lok speichern</button> 
             </form>
             </div>
 

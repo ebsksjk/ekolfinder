@@ -10,9 +10,20 @@ if (!isset($_SESSION['username'])) {
 // Geschützter Inhalt der Seite
 ?>
 
+<html>
+    <head>
+        <link rel="stylesheet" href="../styles/main.css">
+        <link rel="stylesheet" href="../styles/table.css">
+        <link rel="stylesheet" href="../styles/engines.css">
+    </head>
+    <body>
+        <p><?php echo 'Willkommen, ' . $_SESSION['username'] . '!'; ?><p>
 
-<p><?php echo 'Willkommen, ' . $_SESSION['username'] . '!'; ?><p>
+        <h1 class="title">Admin - ekolfinder</h1>
 
-<h1>Admin - ekolfinder</h1>
-
-<a href="addEngine.php">Lok hinzufügen</a>
+        <a href="addEngine.php">Lok hinzufügen</a>
+        <br>
+        <a href="editEngine.php?ID=1">Lok bearbeiten</a>
+    </body>
+    
+</html>
