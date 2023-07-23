@@ -7,7 +7,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         require "../../DBConnect.php";
 
         $sql = "INSERT INTO
-            Trains (Typ, Trasse, Nummer, Von, Nach, Owner)
+            trains (Typ, Trasse, Nummer, Von, Nach, Owner)
             VALUES (?,?,?,?,?,?);";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$_POST['type'], $_POST['trasse'], $znr, $_POST['from'], $_POST['to'], $_POST['operator']]);
