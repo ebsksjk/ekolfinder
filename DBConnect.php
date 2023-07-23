@@ -12,7 +12,7 @@ $file = fopen($_SERVER['DOCUMENT_ROOT'] . "/admin/private/.env", "r");
 
     fclose($file);
 
-    $conn = null;
+    $conn;
 
     try {
         $conn = new PDO($DSN, $usrname, $passwrd);

@@ -11,14 +11,8 @@ if (!isset($_SESSION['username'])) {
 require "../DBConnect.php";
 
 $message = '';
-$baureihe = '';
-
-foreach ($conn->query("SELECT Baureihe, Ordnungsnummer from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
-    $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
-}
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
-    //$message = var_dump($_POST);
 
     $exploder = explode(' ', trim($_POST['class']));
 
@@ -55,7 +49,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die("Fehler beim Hochladen des Bildes! " . $e->getMessage());
         }
 
-        foreach ($conn->query("SELECT imagePath WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+        foreach ($conn->query("SELECT imagePath FROM Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
             unlink($uploadFolder . $row["imagePath"] . '.png');
         }
 
@@ -70,14 +64,19 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     }
 }
 
-$filename = '';
+$filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
 
-foreach($conn->query("SELECT imagePath from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
+foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
     $filename = $row['imagePath'];
+    $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
+    $Name = $row['Name'];
+    $owner = $row['Owner'];
+    $joinedCompany = $row['joinedCompany'];
+    $leftCompany = $row['leftCompany'];
+    $liverySince = $row['liverySince'];
+    $liveryUntil = $row['liveryUntil'];
 }
 ?>
-
-
 <DOCTYPE! html>
 <html>
     <head>
@@ -106,68 +105,23 @@ foreach($conn->query("SELECT imagePath from Engines WHERE EngineID='" . $_GET['I
                         <tr>
                             <td>
                                 <input accept="image/*" type="file" id="fileInput" name="image" onchange="loadFile(event)">
-                                <img id="engine" src='<?php
-echo "../data/images/" .
-    $filename .
-    ".png";
-?>'/>
+                                <img id="engine" src='<?=$filename?>' />
                             </td>
                             <td><input type="text" id="class" name="class" value='<?=$baureihe?>'></td>
-                            <td><input type="text" id="name" name="name" value='<?php
-foreach ($conn->query("SELECT name FROM Engines WHERE EngineID=" . $_GET['ID'] . ";") as $row) {
-    echo $row['name'];
-}
-?>'></td>
-                            <td><input type="text" id="owner" name="owner" value='<?php
-                                foreach ($conn->query("SELECT owner FROM Engines WHERE EngineID=" . $_GET['ID'] . ";") as $row) {
-                                    echo $row['owner'];
-                                }
-                                ?>'>
-                            </td>
-                            <td><input type="date" id="joinedCompany" name="joined" value='<?php
-                                foreach($conn->query("SELECT joinedCompany from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
-                                    echo $row['joinedCompany'];
-                                }
-                            ?>'></td>
-                            <td><input type="date" id="leftCompany" name="left" value='<?php
-                                foreach($conn->query("SELECT leftCompany from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
-                                    echo $row['leftCompany'];
-                                }
-                            ?>'></td>
-                            <td><input type="date" id="liverySince" name="since" value='<?php
-                                foreach($conn->query("SELECT liverySince from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
-                                    echo $row['liverySince'];
-                                }
-                            ?>'></td>
-                            <td><input type="date" id="liveryUntil" name="until" value='<?php
-                                foreach($conn->query("SELECT liveryUntil from Engines WHERE EngineID='" . $_GET['ID'] ."';") as $row){
-                                    echo $row['liveryUntil'];
-                                }
-                            ?>'></td>
+                            <td><input type="text" id="name" name="name" value='<?=$Name?>'></td>
+                            <td><input type="text" id="owner" name="owner" value='<?=$owner?>'></td>
+                            <td><input type="date" id="joinedCompany" name="joined" value='<?=$joinedCompany?>'></td>
+                            <td><input type="date" id="leftCompany" name="left" value='<?=$leftCompany?>'></td>
+                            <td><input type="date" id="liverySince" name="since" value='<?=$liverySince?>'></td>
+                            <td><input type="date" id="liveryUntil" name="until" value='<?=$liveryUntil?>'></td>
                         </tr>
                     </table>
-                    <button class="button-3" role="button">Bild hochladen</button>
+                    <button class="button-3" role="button">Lok speichern</button>
                 </form>
             </div>
-            <div class="other-engines">
-                <table class="engine-table">
-                        <?php
-                            $actBR = "00";
-                            foreach($conn->query("SELECT Baureihe FROM Engines ORDER BY Baureihe;") as $row){
-                                if($row['Baureihe']!== $actBR){
-                                    $actBR = $row['Baureihe'];
-                                    echo "</details></tr>";
-                                    echo "<tr><details><summary>" . $row['Baureihe'] . "</summary>";
-                                    foreach($conn->query("SELECT EngineID, Baureihe, Ordnungsnummer FROM Engines WHERE Baureihe='" . $actBR . "' ORDER BY Baureihe, Ordnungsnummer ;") as $row){
-                                        $baureihe = $row['Baureihe'] . " " . $row['Ordnungsnummer'];
-                                        echo "<a href='" . $_SERVER["PHP_SELF"] . "?ID=" . $row['EngineID'] . "'>" . $baureihe .  "</a>";
-                                        echo "<br/>";
-                                    }
-                                }
-                            }
-                        ?>
-                </table>
-            </div>
+            <?php
+include "../enginetable.php";
+?>
         </div>
         <script>
             function loadFile(event) {
