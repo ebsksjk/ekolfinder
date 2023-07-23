@@ -9,7 +9,7 @@ if(isset($_GET['ID'])) {
     $render = true;
     $filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
 
-    foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+    foreach ($conn->query("SELECT * from engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
         $filename = $row['imagePath'];
         $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
         $Name = $row['Name'];

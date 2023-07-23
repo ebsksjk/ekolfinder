@@ -19,7 +19,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     
         if (isset($_POST['delete'])) {
             try {
-                $sql = "DELETE FROM Engines WHERE EngineID = ?";
+                $sql = "DELETE FROM engines WHERE EngineID = ?";
                 $stmt = $conn->prepare($sql);
                 $stmt->execute([$engineID]);
     
@@ -47,7 +47,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     $LiveryUntil = date('Y-m-d', strtotime($_POST['until']));
 
     try {
-        $sql = "UPDATE Engines SET Baureihe=(?), Ordnungsnummer=(?), Name=(?), Owner=(?), joinedCompany=(?), leftCompany=(?), liverySince=(?), liveryUntil=(?) WHERE EngineID=(?);";
+        $sql = "UPDATE engines SET Baureihe=(?), Ordnungsnummer=(?), Name=(?), Owner=(?), joinedCompany=(?), leftCompany=(?), liverySince=(?), liveryUntil=(?) WHERE EngineID=(?);";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$br, $nr, trim($_POST['name']), trim($_POST['owner']), $joinedCompany, $leftCompany, $LiverySince, $LiveryUntil, $_GET['ID']]);
     } catch (Exception $e) {
@@ -67,11 +67,11 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             die("Fehler beim Hochladen des Bildes! " . $e->getMessage());
         }
 
-        foreach ($conn->query("SELECT imagePath FROM Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+        foreach ($conn->query("SELECT imagePath FROM engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
             unlink($uploadFolder . $row["imagePath"] . '.png');
         }
 
-        $sql = "UPDATE Engines SET imagePath=(?) WHERE EngineID=(?);";
+        $sql = "UPDATE engines SET imagePath=(?) WHERE EngineID=(?);";
         $stmt = $conn->prepare($sql);
         $stmt->execute([$filename, $_GET['ID']]);
 
@@ -85,7 +85,7 @@ if (isset($_GET['ID'])) {
     $renderTrain = true;
     $filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
 
-    foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+    foreach ($conn->query("SELECT * from engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
         $filename = $row['imagePath'];
         $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
         $Name = $row['Name'];

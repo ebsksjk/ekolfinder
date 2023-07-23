@@ -39,7 +39,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             require "../../DBConnect.php";
 
             $sql = "INSERT INTO
-                Engines (Baureihe, Ordnungsnummer, Name, Owner, joinedCompany, leftCompany, liverySince, liveryUntil, imagePath)
+                engines (Baureihe, Ordnungsnummer, Name, Owner, joinedCompany, leftCompany, liverySince, liveryUntil, imagePath)
                 VALUES (?,?,?,?,?,?,?,?,?);";
             $stmt = $conn->prepare($sql);
             $stmt->execute([$br, $nr, trim($_POST['name']), trim($_POST['owner']), $joinedCompany, $leftCompany, $LiverySince, $LiveryUntil, $filename]);
