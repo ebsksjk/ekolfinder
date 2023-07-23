@@ -21,9 +21,13 @@ if (!isset($_SESSION['username'])) {
 
         <h1 class="title">Admin - ekolfinder</h1>
 
-        <a href="addEngine.php">Lok hinzufügen</a>
+        <a href="engines/addEngine.php">Lok hinzufügen</a>
         <br>
-        <a href="editEngine.php?ID=1">Lok bearbeiten</a>
+        <a href="engines/editEngine.php">Lok bearbeiten</a>
+
+        <a href="trains/addTrain.php">Zug hinzufügen</a>
+        <br>
+        <a href="trains/editTrain.php">Zug bearbeiten</a>
     </body>
     
 </html>

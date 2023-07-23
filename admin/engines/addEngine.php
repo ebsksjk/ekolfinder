@@ -4,7 +4,7 @@ session_start();
 // Überprüfen, ob der Benutzer angemeldet ist
 if (!isset($_SESSION['username'])) {
     // Benutzer ist nicht angemeldet, Weiterleitung zur Anmeldeseite
-    header('Location: loginUser.php');
+    header('Location: ../loginUser.php');
     exit;
 }
 
@@ -14,7 +14,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     if ($_FILES['image']['error'] === 0) {
         //require("../DBConnect.php");
 
-        $uploadFolder = "../data/images/";
+        $uploadFolder = "../../data/images/";
         $filename = uniqid();
         $uploadPath = $uploadFolder . $filename . '.png';
 
@@ -36,7 +36,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $message = "<div class='successBox'><p>Erfolgreich hochgeladen!</p></div>";
 
         try {
-            require "../DBConnect.php";
+            require "../../DBConnect.php";
 
             $sql = "INSERT INTO
                 Engines (Baureihe, Ordnungsnummer, Name, Owner, joinedCompany, leftCompany, liverySince, liveryUntil, imagePath)

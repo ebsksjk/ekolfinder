@@ -4,15 +4,33 @@ session_start();
 // Überprüfen, ob der Benutzer angemeldet ist
 if (!isset($_SESSION['username'])) {
     // Benutzer ist nicht angemeldet, Weiterleitung zur Anmeldeseite
-    header('Location: loginUser.php');
+    header('Location: ../loginUser.php');
     exit;
 }
 
-require "../DBConnect.php";
+require "../../DBConnect.php";
 
 $message = '';
 
 if ($_SERVER['REQUEST_METHOD'] == 'POST') {
+
+    if (isset($_GET['ID']) && is_numeric($_GET['ID'])) {
+        $engineID = intval($_GET['ID']);
+    
+        if (isset($_POST['delete'])) {
+            try {
+                $sql = "DELETE FROM Engines WHERE EngineID = ?";
+                $stmt = $conn->prepare($sql);
+                $stmt->execute([$engineID]);
+    
+                $message = "<div class='successBox'><p>Erfolgreich gelöscht!</p></div>";
+                header('Location: ' . $_SERVER['PHP_SELF']);
+                exit;
+            } catch (Exception $e) {
+                die("Fehler beim Löschen der Daten! " . $e->getMessage());
+            }
+        }
+    }
 
     $exploder = explode(' ', trim($_POST['class']));
 
@@ -38,7 +56,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     if ($_FILES['image']['error'] === 0) {
 
-        $uploadFolder = "../data/images/";
+        $uploadFolder = "../../data/images/";
         $filename = uniqid();
 
         $uploadPath = $uploadFolder . $filename . '.png';
@@ -63,18 +81,22 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
         $message = "Fehler beim Upload";
     }
 }
+if (isset($_GET['ID'])) {
+    $renderTrain = true;
+    $filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
 
-$filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
-
-foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
-    $filename = $row['imagePath'];
-    $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
-    $Name = $row['Name'];
-    $owner = $row['Owner'];
-    $joinedCompany = $row['joinedCompany'];
-    $leftCompany = $row['leftCompany'];
-    $liverySince = $row['liverySince'];
-    $liveryUntil = $row['liveryUntil'];
+    foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+        $filename = $row['imagePath'];
+        $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
+        $Name = $row['Name'];
+        $owner = $row['Owner'];
+        $joinedCompany = $row['joinedCompany'];
+        $leftCompany = $row['leftCompany'];
+        $liverySince = $row['liverySince'];
+        $liveryUntil = $row['liveryUntil'];
+    }
+} else {
+    $renderTrain = false;
 }
 ?>
 <DOCTYPE! html>
@@ -82,14 +104,15 @@ foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "
     <head>
         <title>Loks bearbeiten</title>
         <link rel="stylesheet" href="addEngine.css">
-        <link rel="stylesheet" href="../styles/main.css">
+        <link rel="stylesheet" href="../../styles/main.css">
         <!--<link rel="stylesheet" href="../styles/table.css">-->
-        <link rel="stylesheet" href="../styles/engines.css">
+        <link rel="stylesheet" href="../../styles/engines.css">
     </head>
     <body>
         <?=$message?>
         <div class="flexy">
             <div>
+                <?php if($renderTrain): ?>
                 <form method="post" action="<?=$_SERVER['PHP_SELF'] . '?ID=' . $_GET['ID']?>" enctype="multipart/form-data">
                     <table>
                         <tr>
@@ -105,7 +128,7 @@ foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "
                         <tr>
                             <td>
                                 <input accept="image/*" type="file" id="fileInput" name="image" onchange="loadFile(event)">
-                                <img id="engine" src='<?=$filename?>' />
+                                <img id="engine" src='../../data/images/<?=$filename?>.png' />
                             </td>
                             <td><input type="text" id="class" name="class" value='<?=$baureihe?>'></td>
                             <td><input type="text" id="name" name="name" value='<?=$Name?>'></td>
@@ -117,11 +140,16 @@ foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "
                         </tr>
                     </table>
                     <button class="button-3" role="button">Lok speichern</button>
+                    <button class="button-3" name="delete" role="button" onclick="return confirm('Lok löschen?')">Lok löschen</button>
                 </form>
+                <?php else: ?>
+                <h1>Loks bearbeiten</h1>
+                <p>Bitte eine Lok auswählen</p>
+                <?php endif; ?>
             </div>
             <?php
-include "../enginetable.php";
-?>
+                include "../../enginetable.php";
+            ?>
         </div>
         <script>
             function loadFile(event) {

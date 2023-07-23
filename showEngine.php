@@ -3,17 +3,22 @@
 <?php
 require 'DBConnect.php';
 
-$filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
+$render = false;
 
-foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
-    $filename = $row['imagePath'];
-    $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
-    $Name = $row['Name'];
-    $owner = $row['Owner'];
-    $joinedCompany = $row['joinedCompany'];
-    $leftCompany = $row['leftCompany'];
-    $liverySince = $row['liverySince'];
-    $liveryUntil = $row['liveryUntil'];
+if(isset($_GET['ID'])) {
+    $render = true;
+    $filename = $baureihe = $Name = $owner = $joinedCompany = $leftCompany = $liverySince = $liveryUntil = '';
+
+    foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "';") as $row) {
+        $filename = $row['imagePath'];
+        $baureihe = $row["Baureihe"] . ' ' . $row['Ordnungsnummer'];
+        $Name = $row['Name'];
+        $owner = $row['Owner'];
+        $joinedCompany = $row['joinedCompany'];
+        $leftCompany = $row['leftCompany'];
+        $liverySince = $row['liverySince'];
+        $liveryUntil = $row['liveryUntil'];
+    }
 }
 ?>
 <html>
@@ -27,6 +32,7 @@ foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "
         <div class="flexy">
         <div class="main">
             <h1 class="title">Loks ansehen: </h1>
+            <?php if($render): ?>
             <table class="test-table" >
                 <tr>
                     <th>Bild</th>
@@ -64,6 +70,9 @@ foreach ($conn->query("SELECT * from Engines WHERE EngineID='" . $_GET['ID'] . "
                         <?=$liveryUntil?>
                     </td>
             </table>
+            <?php else: ?>
+            <p>Bitte eine Lok auswählen.</p>
+            <?php endif; ?>
 <?php
 include "enginetable.php";
 ?>
