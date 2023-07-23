@@ -21,7 +21,7 @@ if (isset($_GET['ID'])) {
 ?>
 <html>
     <head>
-        <title>Loks anschauen</title>
+        <title>Züge anschauen</title>
         <link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="styles/table.css">
         <link rel="stylesheet" href="styles/engines.css">
@@ -64,4 +64,10 @@ if (isset($_GET['ID'])) {
             <p>Bitte einen Zug auswählen</p>
             <?php endif; ?>
     <body>
+    <?php
+        require 'DBConnect.php';
+        foreach ($conn->query("SELECT ID, Nummer from trains;") as $row) {
+            echo "<a href='" . $_SERVER['PHP_SELF'] . "?ID=" . $row['ID'] ."'>" . $row['Nummer'] . "</a>";
+        }
+    ?>
 </html>
