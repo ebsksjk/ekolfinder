@@ -39,7 +39,6 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
     $owner = $_POST['owner'];
     $name = $_POST['name'];
-    $old_class = $baureihe;
 
     $joinedCompany = date('Y-m-d', strtotime($_POST['joined']));
     $leftCompany = date('Y-m-d', strtotime($_POST['left']));
@@ -77,6 +76,9 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
 
         $message = "<div class='successBox'><p>Erfolgreich hochgeladen!</p></div>";
 
+    }
+    elseif ($_FILES['image']['error'] === 4) {
+        $message = "Veränderte Daten gespeichert!";
     } else {
         $message = "Fehler beim Upload";
     }
