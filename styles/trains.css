@@ -1,0 +1,58 @@
+/* Allgemeine Stildefinitionen für die Tabelle */
+.result-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Stildefinitionen für Header-Zellen */
+.result-table th {
+    background-color: #f1fcf3;
+    border: 1px solid #3b4a3f;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Stildefinitionen für Datenzellen */
+.result-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Wechselnde Hintergrundfarben für Zeilen */
+.result-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Allgemeine Stildefinitionen für die Tabelle */
+.train-table {
+    width: 100%;
+    border-collapse: collapse;
+    margin-top: 20px;
+}
+
+/* Stildefinitionen für Zellen */
+.train-table td {
+    border: 1px solid #dddddd;
+    padding: 8px;
+    text-align: left;
+}
+
+/* Wechselnde Hintergrundfarben für Zeilen */
+.train-table tr:nth-child(even) {
+    background-color: #f9f9f9;
+}
+
+/* Stildefinitionen für Links innerhalb der Zellen */
+.train-table a {
+    color: #0066cc; /* Blaue Farbe für Links */
+    text-decoration: none; /* Keine Unterstreichung für Links */
+    font-weight: bold; /* Fettschrift für Links */
+}
+
+/* Hover-Effekt für Links innerhalb der Zellen */
+.train-table a:hover {
+    text-decoration: underline; /* Unterstreichung bei Hover-Effekt */
+}
+

@@ -6,6 +6,7 @@ if ($_SERVER['REQUEST_METHOD'] == 'POST') {
     try {
         require "../../DBConnect.php";
 
+        global $conn;
         $sql = "INSERT INTO
             trains (Typ, Trasse, Nummer, Von, Nach, Owner)
             VALUES (?,?,?,?,?,?);";

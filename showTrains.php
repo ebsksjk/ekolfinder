@@ -3,6 +3,7 @@
 <?php
 require 'DBConnect.php';
 
+global $conn;
 $renderTrain = false;
 
 if (isset($_GET['ID'])) {
@@ -22,9 +23,10 @@ if (isset($_GET['ID'])) {
 <html>
     <head>
         <title>Züge anschauen</title>
-        <link rel="stylesheet" href="styles/main.css">
+        <!--<link rel="stylesheet" href="styles/main.css">
         <link rel="stylesheet" href="styles/table.css">
-        <link rel="stylesheet" href="styles/engines.css">
+        <link rel="stylesheet" href="styles/engines.css">-->
+        <link rel="stylesheet" href="styles/trains.css">
     </head>
     </body>
         <div class="flexy">
@@ -66,8 +68,19 @@ if (isset($_GET['ID'])) {
     <body>
     <?php
         require 'DBConnect.php';
+        $i = 0;
+        echo "<table class='train-table'>";
+        echo "<tr>";
         foreach ($conn->query("SELECT ID, Nummer from trains;") as $row) {
-            echo "<a href='" . $_SERVER['PHP_SELF'] . "?ID=" . $row['ID'] ."'>" . $row['Nummer'] . "</a>";
+            echo "<td><a href='" . $_SERVER['PHP_SELF'] . "?ID=" . $row['ID'] ."'>" . $row['Nummer'] . "</a></td>";
+            if($i == 10){
+                $i = 0;
+                echo "</tr>";
+                echo "<tr>";
+            }else{
+                $i++;
+            }
         }
+        echo "</table>";
     ?>
 </html>

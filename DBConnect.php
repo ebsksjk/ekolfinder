@@ -12,7 +12,7 @@ $file = fopen($_SERVER['DOCUMENT_ROOT'] . "/admin/private/.env", "r");
 
     fclose($file);
 
-    $conn;
+    $conn = null;
 
     try {
         $conn = new PDO($DSN, $usrname, $passwrd);
@@ -20,4 +20,4 @@ $file = fopen($_SERVER['DOCUMENT_ROOT'] . "/admin/private/.env", "r");
         print "Error!: " . $e->getMessage() . "<br/>";
         die("Die Verbindung zur Datenbank konnte nicht hergestellt werden.");
     }
-?>
+
